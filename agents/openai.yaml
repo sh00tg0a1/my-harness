@@ -1,0 +1,4 @@
+interface:
+  display_name: "My Harness"
+  short_description: "Scaffold OpenAI-spec agent harness for any project"
+  default_prompt: "Use $my-harness to scaffold an agent-first documentation harness for my project."
