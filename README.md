@@ -4,7 +4,7 @@
 
 基于渐进式披露（Progressive Disclosure）理念，生成简短的根目录入口文件（`AGENTS.md`、`ARCHITECTURE.md`）并链接到结构化的 `docs/` 文档树，让编码 Agent 从精简的导航图出发，按需深入到详细规格，而无需一次性加载全部内容。
 
-灵感来源：[Harness Engineering (OpenAI)](https://openai.com/zh-Hans-CN/index/harness-engineering/)。
+灵感来源：[Harness Engineering (OpenAI)](https://openai.com/zh-Hans-CN/index/harness-engineering/)、[Demystifying evals for AI agents (Anthropic)](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)。
 
 ## 产出结构
 
