@@ -5,6 +5,53 @@ description: Scaffold an OpenAI-spec agent harness (AGENTS.md, ARCHITECTURE.md, 
 
 # My Harness
 
+## Progress overview
+
+At the start of execution, display the following task checklist to the user. Update it as you complete each step — mark completed items with `[x]` and the current step with `[→]`.
+
+```
+Harness Setup Progress
+══════════════════════════════════════════════
+
+Phase 1 — Gather context
+  [ ] 1.1  Identity (project name & purpose)
+  [ ] 1.2  Target path
+  [ ] 1.3  Baseline (greenfield / existing)
+  [ ] 1.4  Stack (languages, framework, tools)
+  [ ] 1.5  Shape (frontend / backend / fullstack / CLI / library / monorepo)
+  [ ] 1.6  Domains (product areas)
+  [ ] 1.7  Architecture style
+  [ ] 1.8  Add-ons (Superpowers / Evals)
+  [ ] 1.9  Confirm summary
+
+Phase 2 — Create directory structure
+  [ ] 2.1  Core directories (docs/, design-docs/, exec-plans/, etc.)
+  [ ] 2.2  Optional directories (superpowers / evals if enabled)
+
+Phase 3 — Populate files
+  [ ] 3.1  Root files (AGENTS.md, ARCHITECTURE.md)
+  [ ] 3.2  Top-level docs (DESIGN, PLANS, QUALITY_SCORE, etc.)
+  [ ] 3.3  Design docs (index, core-beliefs)
+  [ ] 3.4  Exec plans & tech debt tracker
+  [ ] 3.5  Generated schema placeholder
+  [ ] 3.6  Product specs (index + per-domain)
+  [ ] 3.7  References (LLM context stubs)
+  [ ] 3.8  Superpowers (if enabled)
+  [ ] 3.9  Evals (if enabled)
+
+Phase 4 — Verify
+  [ ] 4.1  List all created paths
+  [ ] 4.2  Check cross-links
+  [ ] 4.3  Next steps & recommendations
+
+══════════════════════════════════════════════
+```
+
+**Display rules:**
+- Show the full checklist at the **start** of execution.
+- After each step completes, show an **updated** checklist with `[x]` for done and `[→]` for the current step. Skip items that don't apply (e.g. Superpowers/Evals steps when those add-ons are not enabled — mark them `[–]`).
+- Keep the checklist **concise** — do not add commentary inside it. Explanations go in the regular conversation.
+
 ## When to load references
 
 - **Principles and constraints:** Read [references/harness-principles.md](references/harness-principles.md) before generating content.
