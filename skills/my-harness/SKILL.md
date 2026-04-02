@@ -12,21 +12,53 @@ description: Scaffold an OpenAI-spec agent harness (AGENTS.md, ARCHITECTURE.md, 
 - **Superpowers only:** If the user enables Superpowers, read [references/superpowers-addon.md](references/superpowers-addon.md) and add that tree.
 - **Evals only:** If the user enables Evals, read [references/evals-addon.md](references/evals-addon.md) and add that tree.
 
-## Phase 1 — Gather context (parametric)
+## Phase 1 — Gather context (step-by-step)
 
-Ask the user in **one batch** (or use already provided answers):
+Guide the user through the following questions **one at a time**. If the user has already provided some answers in the initial request, skip those and acknowledge them. Use information already available in the repo (package.json, go.mod, pyproject.toml, etc.) to **infer and propose** answers where possible — let the user confirm or correct.
+
+**Step 1 → Identity**
+Ask: project name and one-sentence purpose.
+
+**Step 2 → Target path**
+Ask: where should the harness be created? Default: current working directory.
+Auto-detect: check if cwd looks like a repo root (has `.git/`, `package.json`, etc.). If so, propose it.
+
+**Step 3 → Baseline**
+Ask: greenfield project, or adding harness to an existing repo?
+Auto-detect: if `AGENTS.md`, `docs/`, or `.specify/` already exist, propose "existing" and note what was found.
+
+**Step 4 → Stack**
+Ask: tech stack — language(s), framework, runtime, package manager, build tool, test runner.
+Auto-detect: scan for `package.json`, `go.mod`, `pyproject.toml`, `Cargo.toml`, `pom.xml`, etc. Propose what you find.
+
+**Step 5 → Shape**
+Ask: project type — frontend / backend / fullstack / CLI / library / monorepo.
+Infer from stack and directory structure if possible.
+
+**Step 6 → Domains**
+Ask: key product domains (e.g. auth, billing, admin). Each becomes a `docs/product-specs/<domain>.md`.
+
+**Step 7 → Architecture**
+Ask: architecture style — layered / hexagonal / microservices / monolith / other.
+
+**Step 8 → Add-ons**
+Ask: enable optional add-ons?
+- **Superpowers** (design → plan → execute → verify workflow) — default: no
+- **Evals** (agent evaluation tasks, graders, baselines) — default: no
+
+**When all answers are gathered**, summarize in a compact table and ask for final confirmation before proceeding to Phase 2.
 
 | Topic | What to capture |
 |-------|------------------|
 | Identity | Project name, one-sentence purpose |
+| Target path | Repo root (default: cwd) or explicit path |
+| Baseline | Greenfield vs existing (brief: what already exists) |
 | Stack | Language(s), framework, runtime, package manager, build, test runner |
 | Shape | Project type: frontend / backend / fullstack / CLI / library / monorepo |
-| Domains | Key product domains (e.g. auth, billing, admin) — drives `docs/product-specs/*.md` |
+| Domains | Key product domains — drives `docs/product-specs/*.md` |
 | Architecture | Style: layered / hexagonal / microservices / monolith / other |
-| Baseline | Greenfield vs adding harness to existing repo (brief: what already exists) |
-| Superpowers | Yes / no (default **no**) — adds `docs/superpowers/` per superpowers-addon |
-| Evals | Yes / no (default **no**) — adds `docs/evals/` per evals-addon (agent evaluation tasks, graders, baselines) |
-| Target path | Repo root (default: cwd) or explicit path |
+| Superpowers | Yes / no (default **no**) |
+| Evals | Yes / no (default **no**) |
 
 If the user passes **“superpowers”** or **“--superpowers”** in the request, treat Superpowers as **yes**.
 
@@ -47,6 +79,8 @@ If **Spec Kit is detected**:
 If Spec Kit is **not** detected, proceed normally.
 
 ## Phase 2 — Create directory structure
+
+Proceed directly after Phase 1 confirmation — no additional prompt needed.
 
 At the chosen repo root, ensure directories exist (create missing only; do not delete existing files):
 
@@ -82,6 +116,8 @@ When **Evals** is enabled, also ensure under `docs/`:
 
 ## Phase 3 — Populate files
 
+Proceed directly after Phase 2 — no additional prompt needed.
+
 1. Write **root** `AGENTS.md` and `ARCHITECTURE.md` first — short, link-heavy. If Evals is enabled, add a short subsection in `AGENTS.md` linking to `docs/evals/index.md` (per file-specs).
 2. Write **docs** top-level: `DESIGN.md`, `PLANS.md`, `PRODUCT_SENSE.md`, `QUALITY_SCORE.md`, `RELIABILITY.md`, `SECURITY.md`.
 3. Add **`docs/FRONTEND.md`** when project type is frontend or fullstack; omit otherwise (or replace with a one-line pointer in `docs/DESIGN.md` if “no frontend”).
@@ -97,12 +133,14 @@ When **Evals** is enabled, also ensure under `docs/`:
 
 ## Phase 4 — Verify
 
+Present results to the user for review.
+
 - List created or updated paths.
 - Confirm cross-links (`AGENTS.md` → `ARCHITECTURE.md` → `docs/` indexes) resolve; if Evals: include `docs/evals/index.md` and task/grader links.
 - Remind the user to add CI/lint for docs later if they want mechanical enforcement; if Evals, remind that **task definitions are in-repo** but **running** evals requires a runner (scripts or a framework — see evals-addon).
 
 ## Notes
 
-- Do **not** add README or other auxiliary docs inside the **skill** folder beyond SKILL.md and references.
+- Do **not** add README or other auxiliary docs inside the **skill** folder beyond SKILL.md, references, and evals.
 - If the repo already has `AGENTS.md` or `docs/`, **merge** carefully: preserve user content, only add missing harness pieces and update indexes.
 - Spec Kit compatibility is **lightweight**: detect, don't overwrite, append to `AGENTS.md`, note the `specs/` vs `docs/product-specs/` split.

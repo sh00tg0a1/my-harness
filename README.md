@@ -88,10 +88,10 @@ npx skills add https://github.com/sh00tg0a1/my-harness --skill my-harness
 
 ### 工作流
 
-1. **收集上下文** — Skill 会询问项目名称、技术栈、项目类型、业务领域、架构风格，以及是否启用 Superpowers、是否启用 Evals（`--evals`）。
-2. **创建目录结构** — 在目标仓库根目录创建文件和目录（已有内容不会被覆盖）。
-3. **填充文件** — 每个文件遵循 [`references/file-specs.md`](skills/my-harness/references/file-specs.md) 中的模板规范。
-4. **验证** — 检查交叉链接，列出所有已创建的路径。
+1. **逐步收集上下文** — Skill 会逐个询问：项目名称 → 目标路径 → 是否已有代码 → 技术栈 → 项目类型 → 业务领域 → 架构风格 → 可选插件（Superpowers / Evals）。能从仓库中推断的信息会自动提议，用户确认即可。
+2. **创建目录结构** — 确认后自动执行，在目标仓库根目录创建文件和目录（已有内容不会被覆盖）。
+3. **填充文件** — 自动执行，每个文件遵循 [`references/file-specs.md`](skills/my-harness/references/file-specs.md) 中的模板规范。
+4. **验证** — 展示已创建路径、检查交叉链接，提示后续可选步骤（CI/lint、eval runner 等）。
 
 ### 与 Spec Kit 共存
 
