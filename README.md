@@ -37,7 +37,21 @@ docs/
     <stack>-llms.txt   ← 供 LLM 使用的原始上下文（厂商文档等）
 ```
 
-**可选：** 传入 `--superpowers` 可追加 `docs/superpowers/`，提供 设计 → 计划 → 执行 → 验证 的完整工作流。
+**可选：**
+
+- 传入 `--superpowers` 可追加 `docs/superpowers/`，提供 设计 → 计划 → 执行 → 验证 的完整工作流。
+- 传入 `--evals` 可追加 `docs/evals/`（任务定义、评分器规格、基线目录），用于 AI Agent 的自动化评估约定；任务与评分标准在仓库内定义，**实际跑 eval** 需自行接入脚本或 Harbor、Braintrust、LangSmith 等框架（见 [`references/evals-addon.md`](skills/my-harness/references/evals-addon.md)）。
+
+```
+# --evals 时追加示例
+docs/evals/
+  index.md              ← eval 套件策略与目录
+  tasks/                ← 单任务 YAML/MD
+  graders/
+    rubrics.md          ← LLM 评分量规
+    deterministic.md    ← 代码级检查约定
+  results/baselines/    ← 基线或 CI 产物指针
+```
 
 ## 核心原则
 
@@ -74,7 +88,7 @@ npx skills add https://github.com/kweaver-ai/my-harness --skill my-harness
 
 ### 工作流
 
-1. **收集上下文** — Skill 会询问项目名称、技术栈、项目类型、业务领域、架构风格，以及是否启用 Superpowers。
+1. **收集上下文** — Skill 会询问项目名称、技术栈、项目类型、业务领域、架构风格，以及是否启用 Superpowers、是否启用 Evals（`--evals`）。
 2. **创建目录结构** — 在目标仓库根目录创建文件和目录（已有内容不会被覆盖）。
 3. **填充文件** — 每个文件遵循 [`references/file-specs.md`](skills/my-harness/references/file-specs.md) 中的模板规范。
 4. **验证** — 检查交叉链接，列出所有已创建的路径。
@@ -96,7 +110,36 @@ skills/
       harness-principles.md       ← OpenAI Harness 工程 10 条原则
       file-specs.md               ← 各文件模板与反模式
       superpowers-addon.md        ← 可选 Superpowers 目录与工作流
+      evals-addon.md              ← 可选 Evals（任务、评分器、基线；Anthropic eval 实践）
+    evals/                        ← Skill 自身的评估套件
+      run.py                      ← eval runner（prepare → verify → 汇总）
+      index.md                    ← eval 策略与套件概述
+      tasks/
+        scaffold-greenfield.yaml  ← 从零搭建完整 harness
+        merge-existing.yaml       ← 合并到已有项目
+        speckit-coexistence.yaml  ← Spec Kit 共存
+        evals-addon-enabled.yaml  ← --evals 激活
+      graders/
+        structure-check.md        ← 目录/文件完整性检查
+        link-check.md             ← 交叉链接可达性检查
+        content-rubric.md         ← 内容质量 LLM 评分量规
 ```
+
+## 运行 Eval
+
+验证 skill 产出质量（需要 `pip install pyyaml`）：
+
+```bash
+cd skills/my-harness/evals
+
+# 交互模式：准备环境 → 提示你调用 skill → 自动跑 graders
+python run.py eval tasks/scaffold-greenfield.yaml
+
+# 仅验证已有产出目录
+python run.py verify tasks/scaffold-greenfield.yaml /path/to/output
+```
+
+详见 [`evals/index.md`](skills/my-harness/evals/index.md)。
 
 ## 许可证
 

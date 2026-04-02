@@ -1,0 +1,54 @@
+task:
+  id: speckit-coexistence
+  desc: >
+    Invoke my-harness on a repo that has .specify/ and an existing AGENTS.md.
+    Verify: .specify/ is untouched, AGENTS.md is appended (not replaced),
+    docs/PLANS.md mentions Spec Kit, docs/product-specs/index.md notes the
+    specs/ vs docs/product-specs/ split.
+  suite: capability
+  inputs:
+    identity: "SpecKitApp — app using Spec Kit"
+    stack: "Go, Chi, go test"
+    shape: backend
+    domains: [api, workers]
+    architecture: hexagonal
+    baseline: existing
+    superpowers: false
+    evals: false
+    target_path: "$TEMP_DIR"
+  seed_files:
+    ".specify/config.yaml": |
+      version: 1
+    "specs/auth-feature.md": |
+      # Auth feature spec (Spec Kit managed)
+    "AGENTS.md": |
+      # SpecKitApp
+      Existing agent docs managed by Spec Kit.
+  graders:
+    - type: content_preserved
+      file: .specify/config.yaml
+      must_contain: "version: 1"
+    - type: content_preserved
+      file: specs/auth-feature.md
+      must_contain: "Auth feature spec (Spec Kit managed)"
+    - type: content_preserved
+      file: AGENTS.md
+      must_contain: "Existing agent docs managed by Spec Kit."
+    - type: content_check
+      file: AGENTS.md
+      must_contain: "## Documentation harness"
+    - type: content_check
+      file: docs/PLANS.md
+      must_contain_any:
+        - "Spec Kit"
+        - "specs/"
+    - type: content_check
+      file: docs/product-specs/index.md
+      must_contain_any:
+        - "specs/"
+        - "Spec Kit"
+    - type: link_check
+      ref: ../graders/link-check.md
+  tracked_metrics:
+    - type: transcript
+      metrics: [n_turns, n_tool_calls, n_total_tokens]

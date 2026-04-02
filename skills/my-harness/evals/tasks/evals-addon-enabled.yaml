@@ -1,0 +1,47 @@
+task:
+  id: evals-addon-enabled
+  desc: >
+    Invoke my-harness with --evals on a greenfield repo. Verify that
+    docs/evals/ tree is created with index.md, tasks/, graders/
+    (rubrics.md + deterministic.md), results/baselines/; AGENTS.md
+    links to docs/evals/index.md; QUALITY_SCORE.md mentions eval coverage.
+  suite: regression
+  inputs:
+    identity: "EvalDemo — demo with evals enabled"
+    stack: "Python, Flask, pytest"
+    shape: backend
+    domains: [search]
+    architecture: monolith
+    baseline: greenfield
+    superpowers: false
+    evals: true
+    target_path: "$TEMP_DIR"
+  graders:
+    - type: structure_check
+      ref: ../graders/structure-check.md
+      expect_dirs:
+        - docs/evals/tasks
+        - docs/evals/graders
+        - docs/evals/results/baselines
+      expect_files:
+        - docs/evals/index.md
+        - docs/evals/graders/rubrics.md
+        - docs/evals/graders/deterministic.md
+    - type: content_check
+      file: AGENTS.md
+      must_contain_any:
+        - "docs/evals"
+        - "evals/index.md"
+    - type: content_check
+      file: docs/QUALITY_SCORE.md
+      must_contain_any:
+        - "eval"
+        - "regression"
+        - "baseline"
+    - type: link_check
+      ref: ../graders/link-check.md
+    - type: llm_rubric
+      ref: ../graders/content-rubric.md
+  tracked_metrics:
+    - type: transcript
+      metrics: [n_turns, n_tool_calls, n_total_tokens]

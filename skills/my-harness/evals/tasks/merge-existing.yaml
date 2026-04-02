@@ -1,0 +1,47 @@
+task:
+  id: merge-existing
+  desc: >
+    Invoke my-harness on a directory that already has a partial AGENTS.md
+    and docs/ with some files. Verify the skill merges without overwriting
+    existing user content, adds missing harness pieces, and updates indexes.
+  suite: capability
+  inputs:
+    identity: "ExistingApp — a fullstack app with partial docs"
+    stack: "TypeScript, Next.js, pnpm, vitest"
+    shape: fullstack
+    domains: [dashboard, settings]
+    architecture: layered
+    baseline: existing
+    superpowers: false
+    evals: false
+    target_path: "$TEMP_DIR"
+  seed_files:
+    "AGENTS.md": |
+      # ExistingApp
+      Custom agent instructions that must be preserved.
+    "docs/DESIGN.md": |
+      # Design
+      Existing design notes — do not overwrite.
+  graders:
+    - type: structure_check
+      ref: ../graders/structure-check.md
+      expect_files:
+        - AGENTS.md
+        - ARCHITECTURE.md
+        - docs/DESIGN.md
+        - docs/FRONTEND.md
+        - docs/product-specs/dashboard.md
+        - docs/product-specs/settings.md
+    - type: content_preserved
+      file: AGENTS.md
+      must_contain: "Custom agent instructions that must be preserved."
+    - type: content_preserved
+      file: docs/DESIGN.md
+      must_contain: "Existing design notes — do not overwrite."
+    - type: link_check
+      ref: ../graders/link-check.md
+    - type: llm_rubric
+      ref: ../graders/content-rubric.md
+  tracked_metrics:
+    - type: transcript
+      metrics: [n_turns, n_tool_calls, n_total_tokens]

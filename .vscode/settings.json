@@ -1,0 +1,5 @@
+{
+  "yaml.schemas": {
+    "./.vscode/eval-task.schema.json": "skills/**/evals/tasks/*.yaml"
+  }
+}

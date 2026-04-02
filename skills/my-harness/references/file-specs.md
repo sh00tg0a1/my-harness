@@ -8,7 +8,7 @@ Use these when populating a target repository. Adjust names (e.g. `api-schema.md
 
 - **Purpose:** Operator + agent contract; **map** into `docs/`.
 - **Length:** ~100 lines (keep short).
-- **Include:** Project one-liner; priority order (user > harness docs > defaults); tech stack table; repo layout table; secrets/logging rules; testing bar; links to `ARCHITECTURE.md` and key `docs/` files.
+- **Include:** Project one-liner; priority order (user > harness docs > defaults); tech stack table; repo layout table; secrets/logging rules; testing bar; links to `ARCHITECTURE.md` and key `docs/` files. When Evals add-on is present, add a short subsection linking to `docs/evals/index.md`.
 - **Avoid:** Long tutorials; duplicating `product-specs/`; pasting API lists — **link** instead.
 
 ### `ARCHITECTURE.md`
@@ -27,7 +27,7 @@ Use these when populating a target repository. Adjust names (e.g. `api-schema.md
 ### `docs/PLANS.md`
 
 - **Purpose:** **Roadmap** phases (product), distinct from task-level exec plans.
-- **Include:** Phase 1 = harness/scaffold done; later phases as bullets; link to `exec-plans/` and (if present) `superpowers/plans/`.
+- **Include:** Phase 1 = harness/scaffold done; later phases as bullets; link to `exec-plans/` and (if present) `superpowers/plans/` and (if present) `docs/evals/index.md` for eval suite expansion / “graduate to regression”.
 
 ### `docs/PRODUCT_SENSE.md`
 
@@ -37,7 +37,7 @@ Use these when populating a target repository. Adjust names (e.g. `api-schema.md
 ### `docs/QUALITY_SCORE.md`
 
 - **Purpose:** **Scorecard** for quality dimensions.
-- **Include:** Table — criterion | target | notes (typecheck, tests, docs freshness, coverage if used).
+- **Include:** Table — criterion | target | notes (typecheck, tests, docs freshness, coverage if used). When Evals add-on is present, add rows for eval coverage, regression pass rate, or baseline freshness (see `docs/evals/index.md`).
 
 ### `docs/RELIABILITY.md`
 
@@ -108,6 +108,37 @@ Use these when populating a target repository. Adjust names (e.g. `api-schema.md
 - **Purpose:** **Raw** context for agents (paste zones for vendor docs, long excerpts).
 - **Format:** Plain text; short header; suggested sections to fill.
 - **Examples:** `design-system-reference-llms.txt`, `nixpacks-llms.txt`, `uv-llms.txt` — name by **tool/domain**, not by mystery.
+
+## `docs/evals/` (optional — when Evals add-on is enabled)
+
+See [evals-addon.md](evals-addon.md) for terminology, grader types, capability vs regression, and tooling notes.
+
+### `docs/evals/index.md`
+
+- **Purpose:** **Eval suite** overview — strategy, links to tasks and graders, baselines, how runs are executed (CI script vs external framework).
+- **Include:** List or table of suites (capability vs regression); grader policy (deterministic first, LLM/human as needed); link to `docs/QUALITY_SCORE.md` and `docs/exec-plans/` for eval-related debt; Spec Kit note if `.specify/` exists (evals test agent behavior; `specs/` remain feature specs).
+- **Avoid:** Pasting full task YAML — **link** to `tasks/`.
+
+### `docs/evals/tasks/<name>.yaml` (or `.md`)
+
+- **Purpose:** One **task** (test case): inputs, success criteria, grader references, optional `tracked_metrics`.
+- **Include:** Unambiguous `id` and `desc`; `suite` tag (`capability` | `regression`) if used; grader blocks aligned with `docs/evals/graders/`; everything the grader checks must be inferable from the description.
+- **Avoid:** Ambiguous success criteria; tests that assume hidden constraints (e.g. filepath not stated in prompt).
+
+### `docs/evals/graders/rubrics.md`
+
+- **Purpose:** **LLM-as-judge** rubrics: dimensions, scoring, calibration notes, “unknown” escape hatch for judges.
+- **Include:** Section per rubric; link from task YAML; note human calibration cadence if subjective.
+
+### `docs/evals/graders/deterministic.md`
+
+- **Purpose:** **Code-based** checks: unit tests, lint/type commands, state/outcome checks, optional tool-call hints (avoid overly brittle ordering).
+- **Include:** Naming conventions; where CI invokes these; prefer grading **outcomes** over rigid step sequences.
+
+### `docs/evals/results/baselines/`
+
+- **Purpose:** **Baseline** snapshots or pointers (JSON/MD summaries, or links to CI artifacts).
+- **Include:** `.gitkeep` if empty; in `index.md`, explain whether baselines live in git or externally.
 
 ---
 

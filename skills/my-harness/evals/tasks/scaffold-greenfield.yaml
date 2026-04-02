@@ -1,0 +1,53 @@
+task:
+  id: scaffold-greenfield
+  desc: >
+    Invoke my-harness on an empty directory with standard inputs
+    (backend, Python/FastAPI, monolith, domains: auth + billing).
+    Verify that all Phase 2 directories and Phase 3 files are created,
+    AGENTS.md is ≤120 lines, and all cross-links resolve.
+  suite: regression
+  inputs:
+    identity: "TestProject — a demo backend service"
+    stack: "Python, FastAPI, uvicorn, pip, pytest"
+    shape: backend
+    domains: [auth, billing]
+    architecture: layered
+    baseline: greenfield
+    superpowers: false
+    evals: false
+    target_path: "$TEMP_DIR"
+  graders:
+    - type: structure_check
+      ref: ../graders/structure-check.md
+      expect_dirs:
+        - docs/design-docs
+        - docs/exec-plans/active
+        - docs/exec-plans/completed
+        - docs/generated
+        - docs/product-specs
+        - docs/references
+      expect_files:
+        - AGENTS.md
+        - ARCHITECTURE.md
+        - docs/DESIGN.md
+        - docs/PLANS.md
+        - docs/PRODUCT_SENSE.md
+        - docs/QUALITY_SCORE.md
+        - docs/RELIABILITY.md
+        - docs/SECURITY.md
+        - docs/design-docs/index.md
+        - docs/design-docs/core-beliefs.md
+        - docs/exec-plans/tech-debt-tracker.md
+        - docs/product-specs/index.md
+        - docs/product-specs/auth.md
+        - docs/product-specs/billing.md
+    - type: link_check
+      ref: ../graders/link-check.md
+    - type: line_count
+      file: AGENTS.md
+      max: 120
+    - type: llm_rubric
+      ref: ../graders/content-rubric.md
+  tracked_metrics:
+    - type: transcript
+      metrics: [n_turns, n_tool_calls, n_total_tokens]
