@@ -9,7 +9,21 @@ Use these when populating a target repository. Adjust names (e.g. `api-schema.md
 - **Purpose:** Operator + agent contract; **map** into `docs/`.
 - **Length:** ~100 lines (keep short).
 - **Include:** Project one-liner; priority order (user > harness docs > defaults); tech stack table; repo layout table; secrets/logging rules; testing bar; links to `ARCHITECTURE.md` and key `docs/` files. When Evals add-on is present, add a short subsection linking to `docs/evals/index.md`.
+- **Include — How to use this harness:** A `## How to use this harness` section with a **usage table** so agents know what to read for each kind of work:
+
+| Scenario | Start here | Then |
+| -------- | ---------- | ---- |
+| New feature | `docs/product-specs/<domain>.md` | Create plan in `docs/exec-plans/active/` → implement → move to `completed/` |
+| Bug fix | `docs/RELIABILITY.md` + `docs/SECURITY.md` | Fix → update `docs/QUALITY_SCORE.md` |
+| Architecture change | `ARCHITECTURE.md` | Add `docs/design-docs/<name>.md` → link from `docs/design-docs/index.md` → implement |
+| Tech debt | `docs/exec-plans/tech-debt-tracker.md` | Pick item → create active plan → execute |
+| Keep docs fresh | Relevant `docs/` when code changes | Update `docs/QUALITY_SCORE.md` gaps |
+
+Adjust row wording to the project’s stack; keep the table short.
+
 - **Avoid:** Long tutorials; duplicating `product-specs/`; pasting API lists — **link** instead.
+
+**Update rules (harness update mode):** When adding a domain, append a row to the Quick nav / Deep dives table if needed; add a new `docs/product-specs/<domain>.md` and update `docs/product-specs/index.md`. Do not remove unrelated sections.
 
 ### `ARCHITECTURE.md`
 
@@ -61,6 +75,8 @@ Use these when populating a target repository. Adjust names (e.g. `api-schema.md
 - **Purpose:** **Catalog** of design docs.
 - **Include:** Table — document | description | optional status.
 
+**Update rules:** Append new rows when adding design docs; link new files from this index.
+
 ### `docs/design-docs/core-beliefs.md`
 
 - **Purpose:** **Numbered** engineering principles (agent-first).
@@ -95,6 +111,8 @@ Use these when populating a target repository. Adjust names (e.g. `api-schema.md
 
 - **Purpose:** Catalog of **domain** specs.
 - **Include:** Table linking each `*.md` with one-line description.
+
+**Update rules:** Append new rows for new domains; remove rows only when removing a domain file with user confirmation.
 
 ### `docs/product-specs/<domain>.md`
 
@@ -142,8 +160,69 @@ See [evals-addon.md](evals-addon.md) for terminology, grader types, capability v
 
 ---
 
+## Agent platform bridge files (post-scaffold)
+
+These files **point agents at the harness** when the IDE does not auto-load `AGENTS.md`. **Content pattern** (paths are from **repository root**):
+
+1. Read `AGENTS.md`, then `ARCHITECTURE.md`.
+2. Check `docs/exec-plans/active/` for in-flight plans.
+3. Check `docs/QUALITY_SCORE.md` for known gaps.
+
+### Cursor — `.cursor/rules/harness.mdc`
+
+Create or merge a rule file with front matter:
+
+```yaml
+---
+description: Load project harness (AGENTS.md) before coding tasks
+globs: "**/*"
+alwaysApply: true
+---
+```
+
+Body: the three numbered bullets above, plus “Follow **How to use this harness** in `AGENTS.md` for workflows.”
+
+### Claude Code / OpenAI Codex
+
+No extra file required — `AGENTS.md` is the conventional entry. Mention in the scaffold **final report** only.
+
+### Windsurf — `.windsurfrules`
+
+Append a section (use HTML comments as fences if needed):
+
+```markdown
+## Project harness
+
+Before substantive edits: read `AGENTS.md`, `ARCHITECTURE.md`, `docs/exec-plans/active/`, `docs/QUALITY_SCORE.md`.
+```
+
+### GitHub Copilot — `.github/copilot-instructions.md`
+
+Append the same **Project harness** block (create `.github/` if missing).
+
+### Cline — `.clinerules`
+
+Append the same **Project harness** block.
+
+**Merge rule:** If the file exists, append; do not delete unrelated instructions. Prefer wrapping appended content in `<!-- harness-bridge:start -->` … `<!-- harness-bridge:end -->` for Markdown-based files.
+
+---
+
+## Harness update rules (incremental changes)
+
+When running **harness update** (not full scaffold):
+
+- **Indexes** — Append rows to `docs/product-specs/index.md` and `docs/design-docs/index.md`; do not rewrite entire tables unless reconciling with user approval.
+- **`AGENTS.md`** — Add or adjust nav links surgically; preserve user sections.
+- **Add-ons** — Enabling Superpowers/Evals: create missing dirs/files per addon references; link from `AGENTS.md` / `PLANS.md` / `QUALITY_SCORE.md` as in full scaffold.
+- **Removing domains or add-ons** — Require explicit confirmation; prefer deprecating with a short note over hard delete.
+- **Platform bridges** — Add only missing bridge files or append missing harness blocks; never overwrite whole rule files.
+
+---
+
 ## Anti-patterns (all files)
 
 - **Blob duplication** — same content in `AGENTS.md` and a spec file.
 - **Unlinked files** — add new docs to the nearest `index.md`.
 - **Stale generated** — document regen path or mark explicitly outdated.
+- **Wiping bridge files** — replacing entire `.cursor/rules/*` or `.windsurfrules` with only harness text.

@@ -8,7 +8,7 @@ Evaluates the quality of generated harness content against file-specs and harnes
 
 ### 1. Completeness
 
-Does each file contain the sections required by [file-specs.md](../../references/file-specs.md)?
+Does each file contain the sections required by [file-specs.md](../../references/file-specs.md)? (For `AGENTS.md`, includes **How to use this harness** with the usage table.)
 
 - 5: All required sections present with meaningful content.
 - 3: Most sections present; one or two are shallow placeholders.

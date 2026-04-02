@@ -1,96 +1,97 @@
 ---
 name: my-harness
-description: Scaffold an OpenAI-spec agent harness (AGENTS.md, ARCHITECTURE.md, structured docs/ as record system) for any software project. Creates progressive-disclosure documentation so coding agents navigate from a short map to deep specs. Use when starting a new repo, adding agent-first docs to an existing codebase, or when the user asks for a harness, AGENTS.md scaffold, docs layout, or harness engineering setup. Optional Superpowers (docs/superpowers/) and optional Evals (docs/evals/) when requested.
+description: Scaffold or update an OpenAI-spec agent harness (AGENTS.md, ARCHITECTURE.md, structured docs/) for any software project. Use when starting a new repo, adding agent-first docs, updating an existing harness (harness update), or when the user asks for a harness scaffold, docs layout, or harness engineering setup. Optional Superpowers and Evals; agent platform bridge files (Cursor, Windsurf, Copilot, Cline, etc.).
 ---
 
 # My Harness
 
-<HARD-GATE>
-Do NOT create any files or directories until Phase 1 is complete and the user has confirmed the summary table. This applies to EVERY project regardless of perceived simplicity.
-</HARD-GATE>
+## Scaffold vs update
 
-## Checklist
+**Scaffold (default)** — User wants a new harness or first-time setup. Follow **Phases 1–5** below. Do not create files until Phase 1 step 6 (summary) is confirmed.
 
-You MUST create a task for each of these items and complete them in order:
+**Harness update** — Trigger when the user says e.g. `harness update`, `update harness`, `add domain to harness`, `add eval to harness`, `refresh docs`, `sync harness`, or when the repo already has `AGENTS.md` and `docs/` and the user clearly wants incremental changes. Follow **Harness update mode** (after Phases 1–5 section). If harness files are missing, tell them to run scaffold first.
 
-**Phase 1 — Gather context (one question at a time)**
-1. **Explore project context** — scan repo for existing files, config, structure
-2. **Ask identity** — project name & one-sentence purpose (free-form)
-3. **Detect & confirm target path** — auto-detect repo root, confirm with user
-4. **Detect & confirm baseline** — greenfield vs existing (choice)
-5. **Detect & confirm stack** — scan config files, propose stack, confirm (choice)
-6. **Ask shape** — project type: frontend / backend / fullstack / CLI / library / monorepo (choice)
-7. **Ask domains** — key product areas, each becomes a product-spec (free-form)
-8. **Ask architecture** — layered / hexagonal / microservices / monolith / other (choice)
-9. **Ask add-ons** — Superpowers / Evals / None (multi-select)
-10. **Confirm summary** — present table, get user approval ⛔ GATE: no files until approved
+### Hard gate (scaffold)
 
-**Phase 1.5 — Integration detection & guided setup**
-11. **Spec Kit check** — detect `.specify/`, if found present coexistence plan and confirm with user (choice)
-12. **Superpowers guided setup** — if enabled: read addon ref, present workflow plan, confirm with user (choice)
-13. **Evals guided setup** — if enabled: read addon ref, present eval plan, confirm with user (choice)
+For **scaffold** only: Do NOT create any files or directories until Phase 1 is complete and the user has confirmed the summary table (step 6). This applies to every project regardless of perceived simplicity.
 
-**Phase 2 — Create directory structure**
-14. **Create core directories** — docs/, design-docs/, exec-plans/, etc.
-15. **Create add-on directories** — superpowers / evals dirs if enabled
-16. **⛔ CHECKPOINT: confirm directory tree** — show tree to user, ask "Does this structure look right?"
+## Checklist (scaffold)
 
-**Phase 3 — Populate files (group-by-group with confirmation)**
-17. **Populate root files** — AGENTS.md, ARCHITECTURE.md → show to user for quick review
-18. **Populate top-level docs** — DESIGN, PLANS, PRODUCT_SENSE, QUALITY_SCORE, RELIABILITY, SECURITY, FRONTEND (if applicable)
-19. **Populate design docs** — index.md, core-beliefs.md
-20. **Populate exec plans** — tech-debt-tracker, active/, completed/
-21. **Populate generated** — schema placeholder
-22. **Populate product specs** — index + per-domain files
-23. **Populate references** — LLM context stubs
-24. **⛔ CHECKPOINT: core files review** — list all core files created, ask user to confirm before add-ons
-25. **Populate Superpowers** — workflow.md, specs/, plans/ (if enabled, otherwise skip)
-26. **Populate Evals** — index, graders, example task (if enabled, otherwise skip)
-27. **⛔ CHECKPOINT: add-on files review** — if add-ons enabled, show what was added, confirm (skip if no add-ons)
+You MUST create a task for each item and complete them in order:
 
-**Phase 4 — Verify & Review**
-28. **Verify cross-links** — list all paths, check all Markdown links resolve
-29. **Present final report** — summary table + next steps
-30. **User review** — if changes requested, fix and re-verify (max 3 rounds)
+### Phase 1 — Gather context (batched where sensible)
 
-## Process flow
+1. **Auto-detect** — scan repo: target path, baseline (greenfield vs existing), stack, presence of `.specify/`
+2. **Identity + detection table** — show detection results; ask project name & one-sentence purpose (free-form)
+3. **Shape + architecture** — one interaction: project type + architecture style (structured choices)
+4. **Domains** — key product areas for `docs/product-specs/*.md` (free-form)
+5. **Add-ons + agent platforms** — one interaction: Superpowers / Evals / None (multi-select) **and** which agent tools the team uses (multi-select: Cursor, Claude Code, Codex, Windsurf, GitHub Copilot, Cline, Other)
+6. **Confirm summary** — compact table, user approval ⛔ GATE: no files until approved
+
+### Phase 1.5 — Spec Kit only
+
+7. **Spec Kit check** — if `.specify/` exists: present coexistence plan, confirm (choice). If not detected, skip.
+
+### Phase 2 — Create directory structure
+
+8. **Create core directories** — `docs/`, subdirs per tree below
+9. **Create add-on directories** — superpowers / evals dirs if enabled (no user checkpoint)
+
+### Phase 3 — Populate files
+
+10. **Populate root** — `AGENTS.md`, `ARCHITECTURE.md` (include **How to use this harness** per file-specs)
+11. **Populate top-level docs** — DESIGN, PLANS, PRODUCT_SENSE, QUALITY_SCORE, RELIABILITY, SECURITY, FRONTEND (if applicable)
+12. **Populate design docs** — `design-docs/index.md`, `core-beliefs.md`
+13. **Populate exec plans** — tech-debt-tracker, `active/`, `completed/`
+14. **Populate generated** — schema placeholder
+15. **Populate product specs** — index + per-domain files
+16. **Populate references** — LLM context stubs
+17. **Populate Superpowers** — if enabled (workflow, specs/, plans/)
+18. **Populate Evals** — if enabled (index, graders, example task)
+19. **⛔ CHECKPOINT** — list all files created/updated in Phase 3; user may request fixes before Phase 4 (single checkpoint for core + add-ons)
+
+### Phase 4 — Verify & review
+
+20. **Verify cross-links** — paths and Markdown links resolve
+21. **Final report** — summary table, next steps, native AGENTS.md support for Claude Code / Codex if selected
+22. **User review** — changes if needed (max 3 rounds)
+
+### Phase 5 — Post-generation (no extra questions)
+
+23. **Agent platform bridges** — generate files per [references/file-specs.md](references/file-specs.md) “Agent platform bridge files” for each platform selected in step 5
+
+## Process flow (scaffold)
 
 ```dot
 digraph harness {
     rankdir=TB;
     node [fontsize=10];
 
-    explore [label="1. Explore context" shape=box];
-    gather [label="2-9. Gather context\n(one question at a time)" shape=box];
-    gate1 [label="10. ⛔ GATE\nConfirm summary" shape=diamond style=filled fillcolor="#ffcccc"];
-    integrations [label="11-13. Integration setup\nSpec Kit / Superpowers / Evals\n(guided + confirm each)" shape=box];
-    create_dirs [label="14-15. Create directories" shape=box];
-    cp_dirs [label="16. ⛔ CHECKPOINT\nConfirm dir tree" shape=diamond style=filled fillcolor="#fff3cc"];
-    populate_core [label="17-23. Populate core files" shape=box];
-    cp_core [label="24. ⛔ CHECKPOINT\nReview core files" shape=diamond style=filled fillcolor="#fff3cc"];
-    populate_addons [label="25-26. Populate add-ons" shape=box];
-    cp_addons [label="27. ⛔ CHECKPOINT\nReview add-on files" shape=diamond style=filled fillcolor="#fff3cc"];
-    verify [label="28-29. Verify & report" shape=box];
-    review [label="30. User review" shape=diamond style=filled fillcolor="#ffcccc"];
+    detect [label="1. Auto-detect" shape=box];
+    p1 [label="2-5. Context\n(batched)" shape=box];
+    gate1 [label="6. ⛔ GATE\nConfirm summary" shape=diamond style=filled fillcolor="#ffcccc"];
+    speckit [label="7. Spec Kit\nif .specify/" shape=box];
+    create_dirs [label="8-9. Create dirs" shape=box];
+    populate [label="10-18. Populate files" shape=box];
+    cp [label="19. ⛔ CHECKPOINT\nReview outputs" shape=diamond style=filled fillcolor="#fff3cc"];
+    verify [label="20-21. Verify & report" shape=box];
+    review [label="22. User review" shape=diamond style=filled fillcolor="#ffcccc"];
+    phase5 [label="23. Platform\nbridges" shape=box];
     done [label="Done" shape=doublecircle];
 
-    explore -> gather;
-    gather -> gate1;
-    gate1 -> gather [label="corrects"];
-    gate1 -> integrations [label="approved"];
-    integrations -> create_dirs;
-    create_dirs -> cp_dirs;
-    cp_dirs -> create_dirs [label="adjust"];
-    cp_dirs -> populate_core [label="ok"];
-    populate_core -> cp_core;
-    cp_core -> populate_core [label="fix"];
-    cp_core -> populate_addons [label="ok"];
-    populate_addons -> cp_addons;
-    cp_addons -> populate_addons [label="fix"];
-    cp_addons -> verify [label="ok"];
+    detect -> p1;
+    p1 -> gate1;
+    gate1 -> p1 [label="correct"];
+    gate1 -> speckit [label="approved"];
+    speckit -> create_dirs;
+    create_dirs -> populate;
+    populate -> cp;
+    cp -> populate [label="fix"];
+    cp -> verify [label="ok"];
     verify -> review;
-    review -> populate_core [label="changes\n(max 3 rounds)"];
-    review -> done [label="approved"];
+    review -> populate [label="changes\n(max 3)"];
+    review -> phase5 [label="ok"];
+    phase5 -> done;
 }
 ```
 
@@ -101,264 +102,134 @@ digraph harness {
 - **Superpowers only:** If the user enables Superpowers, read [references/superpowers-addon.md](references/superpowers-addon.md) and add that tree.
 - **Evals only:** If the user enables Evals, read [references/evals-addon.md](references/evals-addon.md) and add that tree.
 
-## Phase 1 — Gather context (step-by-step)
-
-Guide the user through the following questions **one at a time**. Present each question as a **structured choice** (multiple-choice where possible, with an "Other" option for free-form input). If the user has already provided some answers in the initial request, skip those and acknowledge them. Use information already available in the repo to **infer and pre-select** the most likely option.
+## Phase 1 — Gather context
 
 **Interaction rules:**
-- Use structured multiple-choice questions (e.g. AskQuestion tool) whenever possible.
-- Always include an **"Other (I'll describe)"** option for free-form input.
-- When auto-detection finds a strong signal (e.g. `package.json` with Next.js), pre-select that option and let the user confirm or change.
-- For questions that are naturally open-ended (Identity, Domains), use free-form input directly.
 
-**Step 1 → Identity** (free-form)
-Ask: "What is the project name and a one-sentence purpose?"
+- **Batch related choices** — combine shape + architecture; combine add-ons + agent platforms in one step. Keep **identity** and **domains** as separate steps (free-form).
+- Do **not** over-split: if two questions are both structured choices and closely related, present them together.
+- Use structured multiple-choice where possible; include **Other (I'll describe)** where appropriate.
+- Scan the repo **before** asking: infer stack, path, baseline, Spec Kit — show a **detection table** in step 2 alongside identity.
 
-**Step 2 → Target path** (auto-detect + confirm)
-Auto-detect: check if cwd looks like a repo root (has `.git/`, `package.json`, etc.).
-Options:
-- `<detected path>` (recommended)
-- Other path (I'll type it)
+**Step 1 (auto)** — Scan for: repo root signals (`.git/`, `package.json`, etc.), existing `AGENTS.md` / `docs/`, stack files (`package.json`, `go.mod`, `pyproject.toml`, …), `.specify/`.
 
-**Step 3 → Baseline** (choice)
-Auto-detect: if `AGENTS.md`, `docs/`, or `.specify/` already exist, note what was found.
-Options:
-- Greenfield (empty project, create everything from scratch)
-- Existing repo (merge with what's already here: `<detected files>`)
+**Step 2** — Present: target path, baseline summary, stack summary, Spec Kit yes/no. Ask: project name + one-sentence purpose.
 
-**Step 4 → Stack** (auto-detect + confirm)
-Auto-detect: scan for `package.json`, `go.mod`, `pyproject.toml`, `Cargo.toml`, `pom.xml`, etc.
-If detected, propose: "I found `<files>`, which suggests: `<stack summary>`. Is this correct?"
-Options:
-- Yes, that's correct
-- Partially correct (I'll adjust)
-- No, let me describe the stack
+**Step 3** — Shape + architecture in one message:
 
-**Step 5 → Shape** (choice)
-Infer from stack and directory structure if possible. Pre-select the inferred option.
-Options:
-- Frontend
-- Backend
-- Fullstack
-- CLI
-- Library
-- Monorepo
-- Other (I'll describe)
+- Shape: Frontend / Backend / Fullstack / CLI / Library / Monorepo / Other
+- Architecture: Layered / Hexagonal / Microservices / Monolith / Other
 
-**Step 6 → Domains** (free-form)
-Ask: "What are the key product domains? (e.g. auth, billing, admin — each becomes a `docs/product-specs/<domain>.md`)"
-Suggest examples based on detected code structure if possible.
+**Step 4** — Domains (free-form): list key product areas; each becomes `docs/product-specs/<domain>.md`.
 
-**Step 7 → Architecture** (choice)
-Options:
-- Layered (controller → service → repository)
-- Hexagonal (ports & adapters)
-- Microservices
-- Monolith
-- Other (I'll describe)
+**Step 5** — Add-ons + agent platforms:
 
-**Step 8 → Add-ons** (multi-select)
-Options:
-- Superpowers — design → plan → execute → verify workflow
-- Evals — agent evaluation tasks, graders, baselines
-- None (skip all add-ons)
+- Add-ons: Superpowers, Evals, None (multi-select; None excludes both)
+- Agent platforms (multi-select): **Cursor**, **Claude Code**, **Codex**, **Windsurf**, **GitHub Copilot**, **Cline**, **Other**
 
-**Step 9 → Confirm summary**
-When all answers are gathered, summarize in a compact table and ask for final confirmation before proceeding to Phase 2. If anything is wrong, let the user correct individual items.
+CLI shortcuts: `--superpowers` / `--evals` in the user message set those add-ons to yes.
 
-| Topic | What to capture |
-|-------|------------------|
-| Identity | Project name, one-sentence purpose |
-| Target path | Repo root (default: cwd) or explicit path |
-| Baseline | Greenfield vs existing (brief: what already exists) |
-| Stack | Language(s), framework, runtime, package manager, build, test runner |
-| Shape | Project type: frontend / backend / fullstack / CLI / library / monorepo |
-| Domains | Key product domains — drives `docs/product-specs/*.md` |
-| Architecture | Style: layered / hexagonal / microservices / monolith / other |
-| Superpowers | Yes / no (default **no**) |
-| Evals | Yes / no (default **no**) |
+**Step 6 — Summary table + GATE**
 
-If the user passes **“superpowers”** or **“--superpowers”** in the request, treat Superpowers as **yes**.
+| Topic | Capture |
+| ----- | ------- |
+| Identity | Name, one-sentence purpose |
+| Target path | Repo root |
+| Baseline | Greenfield vs existing |
+| Stack | Languages, frameworks, tooling |
+| Shape | Frontend / backend / … |
+| Domains | List |
+| Architecture | Style |
+| Superpowers | Yes / no |
+| Evals | Yes / no |
+| Agent platforms | Which tools (for Phase 5 bridges) |
 
-If the user passes **“evals”** or **“--evals”** in the request, treat Evals as **yes**.
+User approves → Phase 1.5. Superpowers/Evals layouts are listed in the summary; **no separate confirmation** in Phase 1.5 (fixes happen at checkpoint 19 or review).
 
-## Phase 1.5 — Integration detection & guided setup
+## Phase 1.5 — Spec Kit only
 
-This phase runs **after** the user confirms the Phase 1 summary. Each detected integration gets its own guided confirmation — do NOT silently merge.
+Runs after step 6 if `.specify/` exists at repo root.
 
-### Step 11 → Spec Kit check
-
-Scan for `.specify/` at the repo root.
-
-If **Spec Kit is detected**, present the coexistence plan to the user:
-
-> "I detected `.specify/` (Spec Kit). Here's how I'll handle coexistence:"
-> - `AGENTS.md` — append `## Documentation harness` section (preserve existing content)
-> - `docs/PLANS.md` — note that feature specs stay in `specs/`
-> - `docs/product-specs/` — domain-level only; Spec Kit `specs/` stays for feature-level
-> - `docs/evals/` (if enabled) — behavioral tests, not feature specs
-
-Then ask:
-
-Options:
-- Looks good, proceed with this plan
-- I want to adjust the coexistence rules (I'll describe)
-- Skip Spec Kit integration (treat as standalone)
+Present coexistence plan (append to `AGENTS.md`, `docs/PLANS.md` note, domain vs feature specs, evals vs `specs/` if Evals enabled). Options: proceed / adjust rules / skip Spec Kit integration.
 
 **Coexistence rules (once confirmed):**
-- **Never overwrite** `.specify/`, `specs/`, or any agent command dirs (`.claude/commands/`, `.cursor/commands/`, etc.).
-- **`AGENTS.md`** — if it already exists, **append** a `## Documentation harness` section with the `docs/` index links instead of replacing the file. Preserve all existing content.
-- **`docs/PLANS.md`** — add a note: `Feature-level specs are managed by Spec Kit in specs/; this file tracks the product roadmap and documentation harness phases.`
-- **`docs/product-specs/`** — keep for **domain-level** specs (architecture boundaries, APIs); Spec Kit's `specs/` handles **feature-level** specs. Note this distinction in `docs/product-specs/index.md`.
-- **`docs/evals/`** (if Evals enabled) — eval tasks test **agent behavior**; do not replace Spec Kit `specs/`. Note the split in `docs/evals/index.md` per [references/evals-addon.md](references/evals-addon.md).
 
-If Spec Kit is **not** detected, mark step 11 as skipped and proceed.
+- Never overwrite `.specify/`, `specs/`, or agent command dirs.
+- Existing `AGENTS.md` → append `## Documentation harness` with `docs/` links.
+- `docs/product-specs/` = domain-level; Spec Kit `specs/` = feature-level.
 
-### Step 12 → Superpowers guided setup
-
-If Superpowers was enabled in step 9:
-
-1. Read [references/superpowers-addon.md](references/superpowers-addon.md).
-2. Present the workflow plan to the user:
-
-> "Superpowers adds a design → plan → execute → verify workflow. Here's what I'll create:"
-> - `docs/superpowers/workflow.md` — phases, skills, artifact paths
-> - `docs/superpowers/specs/` — dated design specs
-> - `docs/superpowers/plans/` — dated implementation plans
-> - Cross-links in `AGENTS.md` and `docs/PLANS.md`
-
-Then ask:
-
-Options:
-- Looks good, proceed
-- I want to customize the Superpowers layout (I'll describe)
-- Actually, skip Superpowers
-
-If the user changes their mind and skips, update the summary and mark Superpowers as **no**.
-
-### Step 13 → Evals guided setup
-
-If Evals was enabled in step 9:
-
-1. Read [references/evals-addon.md](references/evals-addon.md).
-2. Present the eval plan to the user:
-
-> "Evals adds agent evaluation infrastructure. Here's what I'll create:"
-> - `docs/evals/index.md` — suite overview, strategy, grader policy
-> - `docs/evals/tasks/` — task definitions (YAML)
-> - `docs/evals/graders/` — rubrics.md + deterministic.md
-> - `docs/evals/results/baselines/` — baseline snapshots
-> - Cross-links in `AGENTS.md`, `docs/PLANS.md`, `docs/QUALITY_SCORE.md`
-
-Then ask:
-
-Options:
-- Looks good, proceed
-- I want to customize the Evals layout (I'll describe)
-- Actually, skip Evals
-
-If the user changes their mind and skips, update the summary and mark Evals as **no**.
+If Spec Kit is absent, skip.
 
 ## Phase 2 — Create directory structure
 
-Proceed after Phase 1.5 integration confirmations are complete.
+After Phase 1.5, create missing dirs only (do not delete user files). Tree as before: `docs/design-docs/`, `exec-plans/active|completed/`, `generated/`, `product-specs/`, `references/`, plus `docs/evals/...` if Evals, `docs/superpowers/...` if Superpowers.
 
-At the chosen repo root, ensure directories exist (create missing only; do not delete existing files):
-
-```text
-AGENTS.md
-ARCHITECTURE.md
-docs/
-  design-docs/
-  exec-plans/
-    active/
-    completed/
-  generated/
-  product-specs/
-  references/
-```
-
-When **Evals** is enabled, also ensure under `docs/`:
-
-```text
-  evals/
-    index.md
-    tasks/
-    graders/
-    results/
-      baselines/
-```
-
-- Add `docs/evals/index.md`, `docs/evals/tasks/`, `docs/evals/graders/`, `docs/evals/results/baselines/` **only** when Evals is enabled. Add `docs/evals/results/.gitkeep` if `results/` is otherwise empty.
-- Add `docs/superpowers/workflow.md`, `docs/superpowers/specs/`, `docs/superpowers/plans/` **only** when Superpowers is enabled.
-- Under `exec-plans/active/` and `exec-plans/completed/`, add `.gitkeep` if empty.
-- **Generated placeholder:** Use `docs/generated/db-schema.md` for data-heavy backends; use `docs/generated/api-schema.md` for API-first or CLI-over-HTTP; pick one primary file and mention the other in the placeholder if both matter later.
-- **References:** Create at least one `docs/references/<stack>-llms.txt` — name from the user’s stack (e.g. `vite-llms.txt`, `fastapi-llms.txt`). Multiple files are fine for multiple stacks.
-
-### ⛔ CHECKPOINT (step 16): Confirm directory tree
-
-After creating directories, show the full tree to the user and ask: **"Does this directory structure look right? Any adjustments needed?"**
-- If approved → proceed to Phase 3.
-- If adjustments needed → fix and re-show.
+**No directory-tree checkpoint** — proceed to Phase 3.
 
 ## Phase 3 — Populate files
 
-Proceed after the directory checkpoint is confirmed.
+After directories exist, populate in order per [references/file-specs.md](references/file-specs.md). `AGENTS.md` **must** include **How to use this harness** (usage table) per file-specs.
 
-**Core files (steps 17–23):**
+**Single checkpoint (step 19):** After all files for steps 10–18 exist, list paths and ask for adjustments; then Phase 4.
 
-1. Write **root** `AGENTS.md` and `ARCHITECTURE.md` first — short, link-heavy. If Evals is enabled, add a short subsection in `AGENTS.md` linking to `docs/evals/index.md` (per file-specs). **Show both files to user for quick review** (step 17).
-2. Write **docs** top-level: `DESIGN.md`, `PLANS.md`, `PRODUCT_SENSE.md`, `QUALITY_SCORE.md`, `RELIABILITY.md`, `SECURITY.md`.
-3. Add **`docs/FRONTEND.md`** when project type is frontend or fullstack; omit otherwise (or replace with a one-line pointer in `docs/DESIGN.md` if “no frontend”).
-4. Write **`docs/design-docs/index.md`** and **`docs/design-docs/core-beliefs.md`**; add optional extra design docs as needed and link from index.
-5. Write **`docs/exec-plans/tech-debt-tracker.md`** with an empty table template.
-6. Write **`docs/generated/<schema>.md`** placeholder with regeneration instructions.
-7. Write **`docs/product-specs/index.md`** and one **`docs/product-specs/<domain>.md`** per domain from Phase 1.
-8. Write **`docs/references/*.txt`** stubs for LLM-context dumps (see file-specs).
+## Phase 4 — Verify & review
 
-### ⛔ CHECKPOINT (step 24): Core files review
+1. List created/updated paths.
+2. Confirm cross-links; include evals links if Evals enabled.
+3. CI/lint reminder; Evals runner reminder if applicable.
+4. User approval or fixes (max 3 rounds).
 
-List all core files created so far and ask: **"Core files are ready. Want to review any of them before I proceed to add-ons?"**
-- If user wants changes → fix, then re-confirm.
-- If approved (or no add-ons enabled) → proceed.
+## Phase 5 — Agent platform bridges
 
-**Add-on files (steps 25–26):**
+For each platform selected in step 5, apply [references/file-specs.md](references/file-specs.md) **Agent platform bridge files**:
 
-9. If Superpowers: add **`docs/superpowers/workflow.md`** per superpowers-addon; leave `specs/` and `plans/` empty or with `.gitkeep`.
-10. If Evals: add **`docs/evals/index.md`** per evals-addon; add **`docs/evals/graders/rubrics.md`** and **`docs/evals/graders/deterministic.md`** with template sections; add at least one **`docs/evals/tasks/example-task.yaml`** (or `.md`) as a starter task stub; ensure **`docs/PLANS.md`** and **`docs/QUALITY_SCORE.md`** mention evals when Evals is enabled (per file-specs and evals-addon).
+- **Cursor** — `.cursor/rules/harness.mdc` (or merge into existing rules)
+- **Claude Code / Codex** — no extra file; note in final report that `AGENTS.md` is the primary entry
+- **Windsurf** — append harness section to `.windsurfrules` (create if missing)
+- **GitHub Copilot** — append to `.github/copilot-instructions.md` (create dirs if needed)
+- **Cline** — append to `.clinerules` (create if missing)
+- **Other** — short instructions in final report only
 
-### ⛔ CHECKPOINT (step 27): Add-on files review
+**Merge rule:** If a target file exists, **append** the harness bridge block; do not wipe unrelated content. Use a clear `<!-- harness-bridge:start -->` … `<!-- harness-bridge:end -->` marker where the format allows.
 
-If any add-ons were created, list them and ask: **"Add-on files are ready. Any adjustments?"**
-- If no add-ons were enabled, skip this checkpoint.
+## Harness update mode
 
-**Content rules:** Obey [references/file-specs.md](references/file-specs.md). Align tone and tech with **Principles** in [references/harness-principles.md](references/harness-principles.md). Do **not** duplicate long specs inside `AGENTS.md` — link to `docs/`.
+Use when the user requests update **or** when intent is incremental change on an existing harness (`AGENTS.md` + `docs/` present).
 
-## Phase 4 — Verify & Review
+**If harness missing:** Say to run scaffold first.
 
-Present results to the user for review. This phase supports up to **3 review rounds**.
+**Flow (2–3 interactions):**
 
-1. List created or updated paths.
-2. Confirm cross-links (`AGENTS.md` → `ARCHITECTURE.md` → `docs/` indexes) resolve; if Evals: include `docs/evals/index.md` and task/grader links.
-3. Remind the user to add CI/lint for docs later if they want mechanical enforcement; if Evals, remind that **task definitions are in-repo** but **running** evals requires a runner (scripts or a framework — see evals-addon).
-4. Ask the user: **"Does this look correct? Any changes needed?"**
-   - If approved → mark task 30 complete, done.
-   - If changes requested → apply fixes, re-verify, increment round counter. After 3 rounds, suggest continuing in a follow-up conversation to avoid context drift.
+1. **Auto-detect** — Scan harness: domains, add-ons present, platforms, Spec Kit, key paths.
+2. **Operation menu** — User selects one or more:
+   - **Add domain** — new `docs/product-specs/<domain>.md`, update `product-specs/index.md`, update `AGENTS.md` nav if needed
+   - **Remove domain** — confirm, remove file, update index and links
+   - **Enable add-on** — add Superpowers or Evals tree per references (read addon doc)
+   - **Disable add-on** — confirm; remove or soften links in `AGENTS.md` / `PLANS.md`; prefer marking dirs deprecated in docs rather than deleting without consent
+   - **Add agent platform** — generate missing bridge file for newly chosen platform
+   - **Complete exec plan** — move file `active/` → `completed/` (user names file)
+   - **Add design doc** — new `docs/design-docs/<name>.md`, update index
+   - **Refresh quality score** — suggest updates to `QUALITY_SCORE.md` from repo signals (tests, lint); user confirms
+   - **Sync references** — suggest `docs/references/` updates
+   - **Verify links** — Markdown link pass over harness docs
+3. **Execute + report** — Apply changes; summarize diff; user confirms.
+
+**Update rules:** Prefer **append** and **surgical edits** per file-specs **Harness update rules**; never bulk-replace user customizations.
 
 ## Anti-patterns
 
-The following behaviors are **strictly forbidden**:
+The following are **forbidden**:
 
-- **Skipping ahead**: Do NOT jump to file creation before the user confirms the summary in step 10.
-- **Bundling questions**: Ask ONE question at a time during Phase 1. Do not combine multiple questions in a single message.
-- **Skipping auto-detection**: Always scan the repo first. Do not ask users questions you can answer by reading their files.
-- **Silent assumptions**: If you're unsure about a choice, ask. Never assume defaults silently.
-- **Dropping tasks**: Every checklist item must have a corresponding task entry. Do not complete work without updating task status.
-- **Skipping checkpoints**: Do NOT skip any ⛔ CHECKPOINT. Every checkpoint requires user confirmation before proceeding. Even if you think the output is correct, the user must see and approve it.
-- **Auto-completing add-on setup**: When Superpowers or Evals is enabled, do NOT silently add files. Present the plan in Phase 1.5 and get user approval first.
+- **Skipping ahead (scaffold)** — No file creation before step 6 summary approval.
+- **Over-splitting** — Do not ask every Phase 1 question in isolation when batching is natural (shape+arch; add-ons+platforms).
+- **Skipping auto-detection** — Scan the repo before asking what files already answer.
+- **Silent assumptions** — If unsure, ask; do not invent defaults without user alignment on identity/domains.
+- **Dropping tasks** — Every checklist item must be tracked and completed.
+- **Skipping checkpoint 19** — User must have a chance to review populated outputs before Phase 4 verification (unless user explicitly says skip).
+- **Wiping bridge or config files** — Always merge/append platform bridge content; never delete unrelated agent config.
 
 ## Notes
 
-- Do **not** add README or other auxiliary docs inside the **skill** folder beyond SKILL.md, references, and evals.
-- If the repo already has `AGENTS.md` or `docs/`, **merge** carefully: preserve user content, only add missing harness pieces and update indexes.
-- Spec Kit compatibility is **lightweight**: detect, don't overwrite, append to `AGENTS.md`, note the `specs/` vs `docs/product-specs/` split.
+- Do **not** add README inside the **skill** folder beyond SKILL.md, references, and evals.
+- Merge carefully into existing repos: preserve user content; add missing harness pieces.
+- Spec Kit: detect, do not overwrite; append to `AGENTS.md`; document `specs/` vs `docs/product-specs/`.

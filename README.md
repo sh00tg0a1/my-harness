@@ -10,8 +10,8 @@
 
 在目标仓库中调用该 Skill 后，会创建以下文件：
 
-```
-AGENTS.md              ← ~100 行的 Agent 契约 & 路由导航图
+```text
+AGENTS.md              ← ~100 行的 Agent 契约 & 路由导航图（含「How to use this harness」工作流表）
 ARCHITECTURE.md        ← 技术全景图：架构图、模块边界、数据流
 docs/
   DESIGN.md            ← 设计哲学（简短）
@@ -42,7 +42,11 @@ docs/
 - 传入 `--superpowers` 可追加 `docs/superpowers/`，提供 设计 → 计划 → 执行 → 验证 的完整工作流。
 - 传入 `--evals` 可追加 `docs/evals/`（任务定义、评分器规格、基线目录），用于 AI Agent 的自动化评估约定；任务与评分标准在仓库内定义，**实际跑 eval** 需自行接入脚本或 Harbor、Braintrust、LangSmith 等框架（见 [`references/evals-addon.md`](skills/my-harness/references/evals-addon.md)）。
 
-```
+**Phase 5 — Agent 平台桥接：**
+
+在 Phase 1 中选择团队使用的 Agent 工具后，会在目标仓库生成或追加桥接说明（例如 Cursor 的 `.cursor/rules/harness.mdc`，Windsurf / GitHub Copilot / Cline 的对应配置文件）。**Claude Code / Codex** 通常只需依赖根目录 `AGENTS.md`，无需额外文件。详见 [`references/file-specs.md`](skills/my-harness/references/file-specs.md) 中的「Agent platform bridge files」。
+
+```text
 # --evals 时追加示例
 docs/evals/
   index.md              ← eval 套件策略与目录
@@ -56,7 +60,7 @@ docs/evals/
 ## 核心原则
 
 | # | 原则 | 要点 |
-|---|------|------|
+| --- | --- | --- |
 | 1 | 仓库即唯一信息源 | 不在仓库里的东西，Agent 看不到 |
 | 2 | AGENTS.md 是导航图 | ~100 行指针索引，不是百科全书 |
 | 3 | 渐进式披露 | 从小处开始，按链接深入 |
@@ -82,16 +86,26 @@ npx skills add https://github.com/sh00tg0a1/my-harness --skill my-harness
 
 ### 调用
 
-在 Cursor 中直接调用：
+**首次搭建（scaffold）** — 在 Cursor 中例如：
 
 > Use my-harness to scaffold an agent-first documentation harness for my project.
 
-### 工作流
+**增量更新（harness update）** — 在已有 `AGENTS.md` 与 `docs/` 时，例如：
 
-1. **逐步收集上下文** — Skill 会逐个询问：项目名称 → 目标路径 → 是否已有代码 → 技术栈 → 项目类型 → 业务领域 → 架构风格 → 可选插件（Superpowers / Evals）。能从仓库中推断的信息会自动提议，用户确认即可。
-2. **创建目录结构** — 确认后自动执行，在目标仓库根目录创建文件和目录（已有内容不会被覆盖）。
-3. **填充文件** — 自动执行，每个文件遵循 [`references/file-specs.md`](skills/my-harness/references/file-specs.md) 中的模板规范。
-4. **验证** — 展示已创建路径、检查交叉链接，提示后续可选步骤（CI/lint、eval runner 等）。
+> harness update — add domain `billing`  
+> update harness — enable evals  
+> sync harness — verify links
+
+Skill 会进入 **Harness update mode**：展示现状、选择操作（增删 domain、启用插件、补平台桥接、移动 exec plan、刷新质量记分卡等），再执行并汇总变更。详见 [`SKILL.md`](skills/my-harness/SKILL.md) 中的「Harness update mode」。
+
+### 工作流（scaffold，约 7–8 轮对话）
+
+1. **收集上下文** — 自动扫描仓库并展示检测结果；再问项目名称与目的；合并询问「项目类型 + 架构风格」；再问业务领域；合并询问「Superpowers / Evals」与 **Agent 平台**（Cursor、Claude Code、Codex、Windsurf、GitHub Copilot、Cline 等）；最后汇总表确认（**通过前不写文件**）。
+2. **Spec Kit（可选）** — 若存在 `.specify/`，确认与 Spec Kit 的共存策略（不覆盖 `specs/` 等）。
+3. **创建目录** — 确认后创建目录（无单独「只确认目录」的停顿）。
+4. **填充文件** — 按 [`references/file-specs.md`](skills/my-harness/references/file-specs.md) 写入；全部完成后 **一次 checkpoint** 供用户调整。
+5. **验证与回顾** — 交叉链接检查、最终报告、用户确认（最多 3 轮修改）。
+6. **平台桥接** — 按所选平台生成或追加桥接文件（Phase 5）。
 
 ### 与 Spec Kit 共存
 
@@ -99,16 +113,16 @@ npx skills add https://github.com/sh00tg0a1/my-harness --skill my-harness
 
 ## 仓库结构
 
-```
+```text
 README.md
 skills/
   my-harness/
-    SKILL.md                      ← Skill 定义 & 四阶段工作流
+    SKILL.md                      ← Skill：scaffold 流程、Phase 5 桥接、harness update
     agents/
       openai.yaml                 ← Agent UI 元数据（显示名、默认提示词）
     references/
       harness-principles.md       ← OpenAI Harness 工程 10 条原则
-      file-specs.md               ← 各文件模板与反模式
+      file-specs.md               ← 各文件模板、桥接文件、update 规则
       superpowers-addon.md        ← 可选 Superpowers 目录与工作流
       evals-addon.md              ← 可选 Evals（任务、评分器、基线；Anthropic eval 实践）
     evals/                        ← Skill 自身的评估套件
