@@ -155,6 +155,35 @@ python run.py verify tasks/scaffold-greenfield.yaml /path/to/output
 
 详见 [`evals/index.md`](skills/my-harness/evals/index.md)。
 
+## Demo
+
+`demo/fancy-text/` 是一个用 my-harness skill 生成的完整 harness 示例，目标项目是一个 React + Vite 的花式文字渲染应用。
+
+### 产出概览
+
+```text
+demo/fancy-text/
+  AGENTS.md               ← Agent 契约 & 导航图
+  ARCHITECTURE.md         ← 技术架构图
+  docs/                   ← 完整 docs/ 文档树（含 superpowers + evals）
+  src/                    ← 应用源码（React 18 + Vite 5 + TypeScript）
+  package.json
+```
+
+### 生成提示词
+
+在 Cursor 中对 `demo/fancy-text/` 目录执行：
+
+> Use my-harness to scaffold an agent-first documentation harness for my project. The project is called "fancy-text" — a React SPA that transforms any text input into fancy visual presentations with 25 typography styles. Stack: React 18, Vite 5, TypeScript 5.4. Shape: Frontend, Architecture: Monolith. Domains: rendering, styles. Enable both Superpowers and Evals.
+
+### 本地运行 demo 应用
+
+```bash
+cd demo/fancy-text
+npm install
+npm run dev
+```
+
 ## 许可证
 
 [Apache License 2.0](LICENSE)

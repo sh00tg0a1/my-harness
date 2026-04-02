@@ -1,0 +1,20 @@
+Vite 5 + React 18 + TypeScript reference context
+================================================
+
+Build tool: Vite 5.2+
+Framework: React 18.3+
+Language: TypeScript 5.4+
+
+Key config files:
+- vite.config.ts (if created): @vitejs/plugin-react
+- tsconfig.json: target ES2022, jsx react-jsx, moduleResolution bundler
+
+Dev commands:
+- npm run dev → vite dev server (HMR)
+- npm run build → vite build (production)
+- npm run preview → vite preview (local prod preview)
+
+Relevant docs:
+- https://vitejs.dev/guide/
+- https://react.dev/
+- https://www.typescriptlang.org/docs/

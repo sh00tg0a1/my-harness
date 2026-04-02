@@ -1,0 +1,22 @@
+task:
+  id: add-new-style
+  desc: >
+    Add a new "wave" style to fancy-text that makes characters
+    oscillate up and down with a sine-wave animation.
+  suite: capability
+  setup:
+    description: Start from the current codebase as-is
+  expected_changes:
+    - src/App.tsx (add 'wave' to FancyStyle union)
+    - src/components/StylePicker.tsx (add wave entry to STYLES array)
+    - CSS or inline styles for .fancy-wave class
+  graders:
+    - type: deterministic
+      checks: [build_passes, types_check, file_exists]
+    - type: llm_rubric
+      rubric: docs/evals/graders/rubrics.md
+  success_criteria:
+    - FancyStyle type includes 'wave'
+    - StylePicker shows wave option
+    - FancyRenderer applies wave animation
+    - Build passes with no type errors
