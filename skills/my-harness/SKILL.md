@@ -14,15 +14,15 @@ Harness Setup Progress
 ══════════════════════════════════════════════
 
 Phase 1 — Gather context
-  [ ] 1.1  Identity (project name & purpose)
-  [ ] 1.2  Target path
-  [ ] 1.3  Baseline (greenfield / existing)
-  [ ] 1.4  Stack (languages, framework, tools)
-  [ ] 1.5  Shape (frontend / backend / fullstack / CLI / library / monorepo)
-  [ ] 1.6  Domains (product areas)
-  [ ] 1.7  Architecture style
-  [ ] 1.8  Add-ons (Superpowers / Evals)
-  [ ] 1.9  Confirm summary
+  [ ] 1.1  Identity — project name & purpose (free-form)
+  [ ] 1.2  Target path (auto-detect → confirm)
+  [ ] 1.3  Baseline — greenfield / existing (choice)
+  [ ] 1.4  Stack — languages, framework, tools (auto-detect → confirm)
+  [ ] 1.5  Shape — project type (choice)
+  [ ] 1.6  Domains — product areas (free-form)
+  [ ] 1.7  Architecture style (choice)
+  [ ] 1.8  Add-ons — Superpowers / Evals (multi-select)
+  [ ] 1.9  Confirm summary table
 
 Phase 2 — Create directory structure
   [ ] 2.1  Core directories (docs/, design-docs/, exec-plans/, etc.)
@@ -61,39 +61,68 @@ Phase 4 — Verify
 
 ## Phase 1 — Gather context (step-by-step)
 
-Guide the user through the following questions **one at a time**. If the user has already provided some answers in the initial request, skip those and acknowledge them. Use information already available in the repo (package.json, go.mod, pyproject.toml, etc.) to **infer and propose** answers where possible — let the user confirm or correct.
+Guide the user through the following questions **one at a time**. Present each question as a **structured choice** (multiple-choice where possible, with an "Other" option for free-form input). If the user has already provided some answers in the initial request, skip those and acknowledge them. Use information already available in the repo to **infer and pre-select** the most likely option.
 
-**Step 1 → Identity**
-Ask: project name and one-sentence purpose.
+**Interaction rules:**
+- Use structured multiple-choice questions (e.g. AskQuestion tool) whenever possible.
+- Always include an **"Other (I'll describe)"** option for free-form input.
+- When auto-detection finds a strong signal (e.g. `package.json` with Next.js), pre-select that option and let the user confirm or change.
+- For questions that are naturally open-ended (Identity, Domains), use free-form input directly.
 
-**Step 2 → Target path**
-Ask: where should the harness be created? Default: current working directory.
-Auto-detect: check if cwd looks like a repo root (has `.git/`, `package.json`, etc.). If so, propose it.
+**Step 1 → Identity** (free-form)
+Ask: "What is the project name and a one-sentence purpose?"
 
-**Step 3 → Baseline**
-Ask: greenfield project, or adding harness to an existing repo?
-Auto-detect: if `AGENTS.md`, `docs/`, or `.specify/` already exist, propose "existing" and note what was found.
+**Step 2 → Target path** (auto-detect + confirm)
+Auto-detect: check if cwd looks like a repo root (has `.git/`, `package.json`, etc.).
+Options:
+- `<detected path>` (recommended)
+- Other path (I'll type it)
 
-**Step 4 → Stack**
-Ask: tech stack — language(s), framework, runtime, package manager, build tool, test runner.
-Auto-detect: scan for `package.json`, `go.mod`, `pyproject.toml`, `Cargo.toml`, `pom.xml`, etc. Propose what you find.
+**Step 3 → Baseline** (choice)
+Auto-detect: if `AGENTS.md`, `docs/`, or `.specify/` already exist, note what was found.
+Options:
+- Greenfield (empty project, create everything from scratch)
+- Existing repo (merge with what's already here: `<detected files>`)
 
-**Step 5 → Shape**
-Ask: project type — frontend / backend / fullstack / CLI / library / monorepo.
-Infer from stack and directory structure if possible.
+**Step 4 → Stack** (auto-detect + confirm)
+Auto-detect: scan for `package.json`, `go.mod`, `pyproject.toml`, `Cargo.toml`, `pom.xml`, etc.
+If detected, propose: "I found `<files>`, which suggests: `<stack summary>`. Is this correct?"
+Options:
+- Yes, that's correct
+- Partially correct (I'll adjust)
+- No, let me describe the stack
 
-**Step 6 → Domains**
-Ask: key product domains (e.g. auth, billing, admin). Each becomes a `docs/product-specs/<domain>.md`.
+**Step 5 → Shape** (choice)
+Infer from stack and directory structure if possible. Pre-select the inferred option.
+Options:
+- Frontend
+- Backend
+- Fullstack
+- CLI
+- Library
+- Monorepo
+- Other (I'll describe)
 
-**Step 7 → Architecture**
-Ask: architecture style — layered / hexagonal / microservices / monolith / other.
+**Step 6 → Domains** (free-form)
+Ask: "What are the key product domains? (e.g. auth, billing, admin — each becomes a `docs/product-specs/<domain>.md`)"
+Suggest examples based on detected code structure if possible.
 
-**Step 8 → Add-ons**
-Ask: enable optional add-ons?
-- **Superpowers** (design → plan → execute → verify workflow) — default: no
-- **Evals** (agent evaluation tasks, graders, baselines) — default: no
+**Step 7 → Architecture** (choice)
+Options:
+- Layered (controller → service → repository)
+- Hexagonal (ports & adapters)
+- Microservices
+- Monolith
+- Other (I'll describe)
 
-**When all answers are gathered**, summarize in a compact table and ask for final confirmation before proceeding to Phase 2.
+**Step 8 → Add-ons** (multi-select)
+Options:
+- Superpowers — design → plan → execute → verify workflow
+- Evals — agent evaluation tasks, graders, baselines
+- None (skip all add-ons)
+
+**Step 9 → Confirm summary**
+When all answers are gathered, summarize in a compact table and ask for final confirmation before proceeding to Phase 2. If anything is wrong, let the user correct individual items.
 
 | Topic | What to capture |
 |-------|------------------|
