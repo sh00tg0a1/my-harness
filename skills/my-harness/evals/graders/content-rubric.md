@@ -16,11 +16,11 @@ Does each file contain the sections required by [file-specs.md](../../references
 
 ### 2. Conciseness
 
-Does `AGENTS.md` stay short (~100 lines) and link instead of duplicate?
+Does `AGENTS.md` stay within the **120-line hard ceiling** and link instead of duplicate?
 
-- 5: Under 100 lines; all deep content linked to `docs/`.
-- 3: 100–150 lines; minor duplication.
-- 1: Over 150 lines or substantial duplication with spec files.
+- 5: Under 100 lines; all deep content linked to `docs/`; usage table has ≤3 rows.
+- 3: 100–120 lines; minor duplication; usage table may have extra rows.
+- 1: Over 120 lines (automatic fail) or substantial duplication with spec files.
 
 ### 3. Cross-linking
 

@@ -7,19 +7,17 @@ Use these when populating a target repository. Adjust names (e.g. `api-schema.md
 ### `AGENTS.md`
 
 - **Purpose:** Operator + agent contract; **map** into `docs/`.
-- **Length:** ~100 lines (keep short).
+- **Length:** target ~100 lines; **hard ceiling 120 lines**. Exceeding 120 is a quality defect.
 - **Include:** Project one-liner; priority order (user > harness docs > defaults); tech stack table; repo layout table; secrets/logging rules; testing bar; links to `ARCHITECTURE.md` and key `docs/` files. When Evals add-on is present, add a short subsection linking to `docs/evals/index.md`.
-- **Include — How to use this harness:** A `## How to use this harness` section with a **usage table** so agents know what to read for each kind of work:
+- **Include — How to use this harness:** A short `## How to use this harness` section with **3 rows max** and a link to `docs/PLANS.md` for extended workflows:
 
 | Scenario | Start here | Then |
 | -------- | ---------- | ---- |
 | New feature | `docs/product-specs/<domain>.md` | Create plan in `docs/exec-plans/active/` → implement → move to `completed/` |
 | Bug fix | `docs/RELIABILITY.md` + `docs/SECURITY.md` | Fix → update `docs/QUALITY_SCORE.md` |
-| Architecture change | `ARCHITECTURE.md` | Add `docs/design-docs/<name>.md` → link from `docs/design-docs/index.md` → implement |
-| Tech debt | `docs/exec-plans/tech-debt-tracker.md` | Pick item → create active plan → execute |
-| Keep docs fresh | Relevant `docs/` when code changes | Update `docs/QUALITY_SCORE.md` gaps |
+| Architecture change | `ARCHITECTURE.md` | Add `docs/design-docs/<name>.md` → link from index → implement |
 
-Adjust row wording to the project’s stack; keep the table short.
+End the section with: `For tech debt, doc maintenance, and other workflows see [docs/PLANS.md](docs/PLANS.md).` Do NOT add more rows; push additional workflows to `docs/PLANS.md`.
 
 - **Avoid:** Long tutorials; duplicating `product-specs/`; pasting API lists — **link** instead.
 
@@ -40,18 +38,19 @@ Adjust row wording to the project’s stack; keep the table short.
 
 ### `docs/PLANS.md`
 
-- **Purpose:** **Roadmap** phases (product), distinct from task-level exec plans.
-- **Include:** Phase 1 = harness/scaffold done; later phases as bullets; link to `exec-plans/` and (if present) `superpowers/plans/` and (if present) `docs/evals/index.md` for eval suite expansion / “graduate to regression”.
+- **Purpose:** **Roadmap** phases (product), distinct from task-level exec plans. Also the home for **extended workflow guidance** that does not fit in `AGENTS.md`'s 3-row usage table (tech debt triage, doc maintenance cadence, etc.).
+- **Include:** Phase 1 = harness/scaffold done; later phases as bullets; link to `exec-plans/` and (if present) `superpowers/plans/` and (if present) `docs/evals/index.md` for eval suite expansion / "graduate to regression". Include a **Workflows** section for tech debt, doc freshness, and any project-specific routines.
 
 ### `docs/PRODUCT_SENSE.md`
 
-- **Purpose:** **Who** the product serves and **what** “good” looks like.
+- **Purpose:** **Who** the product serves and **what** "good" looks like.
 - **Include:** 3–7 bullets (personas, non-goals, UX principles).
 
 ### `docs/QUALITY_SCORE.md`
 
 - **Purpose:** **Scorecard** for quality dimensions.
 - **Include:** Table — criterion | target | notes (typecheck, tests, docs freshness, coverage if used). When Evals add-on is present, add rows for eval coverage, regression pass rate, or baseline freshness (see `docs/evals/index.md`).
+- **Refresh rules (harness update):** Every entry must reference a **concrete repo signal** (e.g. `jest.config.ts` exists, `pytest` in `pyproject.toml`, CI workflow name). If no signal is found for a criterion, write **TBD** — do not invent numbers or percentages.
 
 ### `docs/RELIABILITY.md`
 
@@ -103,7 +102,7 @@ Adjust row wording to the project’s stack; keep the table short.
 ### `docs/generated/db-schema.md` or `docs/generated/api-schema.md`
 
 - **Purpose:** **Placeholder** for generated artifacts.
-- **Include:** How to regenerate (command/script); “do not hand-edit” warning.
+- **Include:** How to regenerate (command/script); "do not hand-edit" warning.
 
 ## `docs/product-specs/`
 
@@ -145,7 +144,7 @@ See [evals-addon.md](evals-addon.md) for terminology, grader types, capability v
 
 ### `docs/evals/graders/rubrics.md`
 
-- **Purpose:** **LLM-as-judge** rubrics: dimensions, scoring, calibration notes, “unknown” escape hatch for judges.
+- **Purpose:** **LLM-as-judge** rubrics: dimensions, scoring, calibration notes, "unknown" escape hatch for judges.
 - **Include:** Section per rubric; link from task YAML; note human calibration cadence if subjective.
 
 ### `docs/evals/graders/deterministic.md`
@@ -180,7 +179,7 @@ alwaysApply: true
 ---
 ```
 
-Body: the three numbered bullets above, plus “Follow **How to use this harness** in `AGENTS.md` for workflows.”
+Body: the three numbered bullets above, plus "Follow **How to use this harness** in `AGENTS.md` for workflows."
 
 ### Claude Code / OpenAI Codex
 
@@ -215,8 +214,9 @@ When running **harness update** (not full scaffold):
 - **Indexes** — Append rows to `docs/product-specs/index.md` and `docs/design-docs/index.md`; do not rewrite entire tables unless reconciling with user approval.
 - **`AGENTS.md`** — Add or adjust nav links surgically; preserve user sections.
 - **Add-ons** — Enabling Superpowers/Evals: create missing dirs/files per addon references; link from `AGENTS.md` / `PLANS.md` / `QUALITY_SCORE.md` as in full scaffold.
-- **Removing domains or add-ons** — Require explicit confirmation; prefer deprecating with a short note over hard delete.
+- **Removing domains or add-ons** — Require explicit confirmation; **must list all files that will be modified or deleted before executing**; prefer deprecating with a short note over hard delete.
 - **Platform bridges** — Add only missing bridge files or append missing harness blocks; never overwrite whole rule files.
+- **Refresh quality score** — Every criterion must cite a concrete repo signal; write **TBD** when no signal exists.
 
 ---
 
@@ -226,3 +226,4 @@ When running **harness update** (not full scaffold):
 - **Unlinked files** — add new docs to the nearest `index.md`.
 - **Stale generated** — document regen path or mark explicitly outdated.
 - **Wiping bridge files** — replacing entire `.cursor/rules/*` or `.windsurfrules` with only harness text.
+- **Fabricated quality data** — inventing coverage %, test counts, or scores without verifiable repo signals.

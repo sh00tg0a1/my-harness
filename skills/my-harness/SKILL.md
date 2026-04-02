@@ -11,6 +11,8 @@ description: Scaffold or update an OpenAI-spec agent harness (AGENTS.md, ARCHITE
 
 **Harness update** — Trigger when the user says e.g. `harness update`, `update harness`, `add domain to harness`, `add eval to harness`, `refresh docs`, `sync harness`, or when the repo already has `AGENTS.md` and `docs/` and the user clearly wants incremental changes. Follow **Harness update mode** (after Phases 1–5 section). If harness files are missing, tell them to run scaffold first.
 
+**Ambiguous intent with existing harness:** If `AGENTS.md` + `docs/` already exist but the user says something like `scaffold`, `create harness`, or `set up harness` (without explicitly saying `update`), ask: "I found an existing harness. Do you want to **re-scaffold** (overwrite) or **update** (incremental changes)?" Do not assume one or the other.
+
 ### Hard gate (scaffold)
 
 For **scaffold** only: Do NOT create any files or directories until Phase 1 is complete and the user has confirmed the summary table (step 6). This applies to every project regardless of perceived simplicity.
@@ -117,7 +119,7 @@ digraph harness {
 
 **Step 3** — Shape + architecture in one message:
 
-- Shape: Frontend / Backend / Fullstack / CLI / Library / Monorepo / Other
+- Shape: Frontend / Backend / Fullstack / CLI / Library / Other
 - Architecture: Layered / Hexagonal / Microservices / Monolith / Other
 
 **Step 4** — Domains (free-form): list key product areas; each becomes `docs/product-specs/<domain>.md`.
@@ -137,7 +139,7 @@ CLI shortcuts: `--superpowers` / `--evals` in the user message set those add-ons
 | Target path | Repo root |
 | Baseline | Greenfield vs existing |
 | Stack | Languages, frameworks, tooling |
-| Shape | Frontend / backend / … |
+| Shape | Frontend / backend / fullstack / CLI / library / other |
 | Domains | List |
 | Architecture | Style |
 | Superpowers | Yes / no |
@@ -168,7 +170,7 @@ After Phase 1.5, create missing dirs only (do not delete user files). Tree as be
 
 ## Phase 3 — Populate files
 
-After directories exist, populate in order per [references/file-specs.md](references/file-specs.md). `AGENTS.md` **must** include **How to use this harness** (usage table) per file-specs.
+After directories exist, populate in order per [references/file-specs.md](references/file-specs.md). `AGENTS.md` **must** include **How to use this harness** (3-row usage table + link to `docs/PLANS.md`) per file-specs. `AGENTS.md` must stay within the **120-line hard ceiling**.
 
 **Single checkpoint (step 19):** After all files for steps 10–18 exist, list paths and ask for adjustments; then Phase 4.
 
@@ -180,6 +182,8 @@ After directories exist, populate in order per [references/file-specs.md](refere
 4. User approval or fixes (max 3 rounds).
 
 ## Phase 5 — Agent platform bridges
+
+Phase 5 runs **after Phase 4 review is approved**. Bridge files must be generated from the **final version** of `AGENTS.md` — if Phase 4 review triggered modifications, those changes must be reflected in bridge content.
 
 For each platform selected in step 5, apply [references/file-specs.md](references/file-specs.md) **Agent platform bridge files**:
 
@@ -203,18 +207,22 @@ Use when the user requests update **or** when intent is incremental change on an
 1. **Auto-detect** — Scan harness: domains, add-ons present, platforms, Spec Kit, key paths.
 2. **Operation menu** — User selects one or more:
    - **Add domain** — new `docs/product-specs/<domain>.md`, update `product-specs/index.md`, update `AGENTS.md` nav if needed
-   - **Remove domain** — confirm, remove file, update index and links
+   - **Remove domain** — list all files that will be modified or deleted, get user confirmation, then execute
    - **Enable add-on** — add Superpowers or Evals tree per references (read addon doc)
-   - **Disable add-on** — confirm; remove or soften links in `AGENTS.md` / `PLANS.md`; prefer marking dirs deprecated in docs rather than deleting without consent
+   - **Disable add-on** — list all files that will be modified, get user confirmation; prefer marking dirs deprecated in docs rather than deleting without consent
    - **Add agent platform** — generate missing bridge file for newly chosen platform
    - **Complete exec plan** — move file `active/` → `completed/` (user names file)
    - **Add design doc** — new `docs/design-docs/<name>.md`, update index
-   - **Refresh quality score** — suggest updates to `QUALITY_SCORE.md` from repo signals (tests, lint); user confirms
+   - **Refresh quality score** — scan for concrete repo signals (CI config, test runner config, lint setup); update `QUALITY_SCORE.md` citing each signal; write **TBD** for any criterion without a verifiable signal — do not invent numbers
    - **Sync references** — suggest `docs/references/` updates
    - **Verify links** — Markdown link pass over harness docs
 3. **Execute + report** — Apply changes; summarize diff; user confirms.
 
-**Update rules:** Prefer **append** and **surgical edits** per file-specs **Harness update rules**; never bulk-replace user customizations.
+**Update rules:**
+
+- Prefer **append** and **surgical edits** per file-specs **Harness update rules**; never bulk-replace user customizations.
+- **Destructive operations** (remove domain, disable add-on): must list all files that will be modified or deleted, get explicit user confirmation, then execute.
+- **Refresh quality score**: every criterion must cite a concrete repo signal; write **TBD** if none found.
 
 ## Anti-patterns
 
@@ -227,6 +235,8 @@ The following are **forbidden**:
 - **Dropping tasks** — Every checklist item must be tracked and completed.
 - **Skipping checkpoint 19** — User must have a chance to review populated outputs before Phase 4 verification (unless user explicitly says skip).
 - **Wiping bridge or config files** — Always merge/append platform bridge content; never delete unrelated agent config.
+- **Blind deletions** — Never remove files or domains without listing all affected paths and getting user confirmation first.
+- **Fabricated quality data** — Never invent coverage %, test counts, or scores in `QUALITY_SCORE.md` without verifiable repo signals; use **TBD** instead.
 
 ## Notes
 
