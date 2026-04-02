@@ -11,7 +11,7 @@
 在目标仓库中调用该 Skill 后，会创建以下文件：
 
 ```text
-AGENTS.md              ← ~100 行的 Agent 契约 & 路由导航图（含「How to use this harness」工作流表）
+AGENTS.md              ← ≤120 行的 Agent 契约 & 导航图（含 3 行工作流表 + PLANS.md 链接）
 ARCHITECTURE.md        ← 技术全景图：架构图、模块边界、数据流
 docs/
   DESIGN.md            ← 设计哲学（简短）
