@@ -75,7 +75,7 @@ docs/evals/
 ### 安装
 
 ```bash
-npx skills add https://github.com/kweaver-ai/my-harness --skill my-harness
+npx skills add https://github.com/sh00tg0a1/my-harness --skill my-harness
 ```
 
 安装后在 Cursor 对话中输入 `/my-harness`，如果能识别则说明安装成功。
