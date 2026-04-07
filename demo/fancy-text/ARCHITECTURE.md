@@ -9,8 +9,14 @@
 │  ┌──────────┐  ┌──────────────────────┐ │
 │  │ App      │  │ Components           │ │
 │  │ (state)  │──│ • StylePicker        │ │
+│  │          │  │ • ColorControl       │ │
 │  │          │  │ • FancyRenderer      │ │
+│  │          │  │ • ExportPanel        │ │
 │  └──────────┘  └──────────────────────┘ │
+│                ┌──────────────────────┐ │
+│                │ Utils                │ │
+│                │ • exportHTML.ts      │ │
+│                └──────────────────────┘ │
 └─────────────────────────────────────────┘
 ```
 
@@ -19,8 +25,9 @@
 | Layer | Path | Responsibility |
 |-------|------|----------------|
 | Entry | `src/main.tsx` | React root mount |
-| App | `src/App.tsx` | State management, layout |
-| Components | `src/components/` | UI rendering, style effects |
+| App | `src/App.tsx` | State management, layout, embed mode |
+| Components | `src/components/` | StylePicker, ColorControl, FancyRenderer, ExportPanel |
+| Utils | `src/utils/` | Export helpers (HTML generation) |
 
 ## Allowed edges
 

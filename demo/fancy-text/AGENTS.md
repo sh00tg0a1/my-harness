@@ -30,6 +30,16 @@ Design → Plan → Execute → Verify workflow: [docs/superpowers/workflow.md](
 
 Agent evaluation suite: [docs/evals/index.md](docs/evals/index.md)
 
+## How to use this harness
+
+| Scenario | Start here | Then |
+| -------- | ---------- | ---- |
+| New feature | `docs/product-specs/<domain>.md` | Create plan in `docs/exec-plans/active/` → implement → move to `completed/` |
+| Bug fix | `docs/RELIABILITY.md` + `docs/SECURITY.md` | Fix → update `docs/QUALITY_SCORE.md` |
+| Architecture change | `ARCHITECTURE.md` | Add `docs/design-docs/<name>.md` → link from index → implement |
+
+For tech debt, doc maintenance, and other workflows see [docs/PLANS.md](docs/PLANS.md).
+
 ## Conventions
 
 - Stack: React 18 + Vite 5 + TypeScript 5.4

@@ -2,30 +2,30 @@
 
 ## Component tree
 
-```
+```text
 App
 ├── <textarea>          — text input
-├── StylePicker         — style selection buttons
-└── FancyRenderer       — animated text output
+├── StylePicker         — style selection grid (25 styles)
+├── ColorControl        — hue slider for color customization
+├── FancyRenderer       — animated text output (per-character spans)
+└── ExportPanel         — export styled text as HTML
 ```
 
 ## Style system
 
-Five built-in styles defined as `FancyStyle` union type:
+25 built-in styles defined as `FancyStyle` union type in `src/App.tsx`:
 
-| Style | CSS class | Effect |
-|-------|-----------|--------|
-| neon | `fancy-neon` | Glowing text shadow |
-| gradient | `fancy-gradient` | Rainbow gradient fill |
-| typewriter | `fancy-typewriter` | Sequential character reveal |
-| glitch | `fancy-glitch` | RGB shift + distortion |
-| handwriting | `fancy-handwriting` | Cursive font + ink effect |
+`neon` · `gradient` · `typewriter` · `glitch` · `handwriting` · `fire` · `ice` · `matrix` · `retro` · `shadow3d` · `bounce` · `wave` · `sparkle` · `smoke` · `outline` · `cyber` · `gold` · `pixel` · `elastic` · `blur` · `rainbow-bounce` · `neon-blue` · `chalk` · `stamp` · `bubble`
+
+## Embed mode
+
+Append `?embed=1&text=Hello&style=neon&hue=180` to the URL to render a style without UI chrome. Used by `ExportPanel` for HTML export.
 
 ## Adding a new style
 
-1. Add value to `FancyStyle` type in `App.tsx`
-2. Add entry to `STYLES` array in `StylePicker.tsx`
-3. Add CSS class `.fancy-<name>` with animations
+1. Add value to `FancyStyle` type in `src/App.tsx`
+2. Add entry to `STYLES` array in `src/components/StylePicker.tsx`
+3. Add CSS class `.fancy-<name>` with animations in `src/index.css`
 
 ## Related
 

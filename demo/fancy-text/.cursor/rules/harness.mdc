@@ -1,0 +1,11 @@
+---
+description: Load project harness (AGENTS.md) before coding tasks
+globs: "**/*"
+alwaysApply: true
+---
+
+1. Read `AGENTS.md`, then `ARCHITECTURE.md`.
+2. Check `docs/exec-plans/active/` for in-flight plans.
+3. Check `docs/QUALITY_SCORE.md` for known gaps.
+
+Follow **How to use this harness** in `AGENTS.md` for workflows.
